@@ -1,7 +1,6 @@
 import { API_ROOT, I18N } from "./config";
 
 export default {
-  mode:"spa",
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
     title: "base-project",
@@ -21,7 +20,7 @@ export default {
   css: ["view-design/dist/styles/iview.css"],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: ["@/plugins/view-ui"],
+  plugins: [{ src: "@/plugins/view-ui" }],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
@@ -29,7 +28,7 @@ export default {
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
   buildModules: [
     // https://go.nuxtjs.dev/eslint
-    "@nuxtjs/eslint-module",
+    // "@nuxtjs/eslint-module",
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules

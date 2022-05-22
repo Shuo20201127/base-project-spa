@@ -1,42 +1,61 @@
 <template>
-  <div class="container">
-    <div>
-      <NuxtLogo />
-      <h1 class="title">
-        {{ $t('home') }}
-      </h1>
-      <h2 class="subtitle">
-        Welcome to the View UI + Nuxt.js template
-      </h2>
-      <div class="links">
-        <Button type="primary" target="_blank" rel="noopener noreferrer" to="https://nuxtjs.org/">
-          Documentation
-        </Button>
-        <Button target="_blank" rel="noopener noreferrer" to="https://github.com/nuxt/nuxt.js">
-          GitHub
-        </Button>
-        <Button target="_blank" rel="noopener noreferrer" to="https://www.iviewui.com/">
-          View UI
-        </Button>
-      </div>
+  <div id="page">
+    <Title id="title"></Title>
+
+    <div class="page_content" ref="page_content">
+      <About id="about"></About>
+      <Menus id="menu"></Menus>
+      <Happenings id="happenings" :bookNow="companyInfo.booking"></Happenings>
+      <Contact  id="contact" 
+        :address="companyInfo.address" 
+        :phone="companyInfo.phnoe" 
+        :daily="companyInfo.daily" 
+        :email="companyInfo.email"
+      ></Contact>
+      <BookNow id="bookNow"></BookNow>
     </div>
   </div>
 </template>
 
 <script>
+import { companyInfo } from '@/api/index.js'
+
 export default {
-  name: 'IndexPage'
+  name: 'IndexPage',
+  data: () => {
+      return {
+          companyInfo: {},
+      }
+  },
+  methods: {
+      async handleCompanyInfo () {
+          const res = await companyInfo.getCompanyInfo()
+          this.companyInfo = res.data.data
+          this.$nuxt.$emit('getBooking', this.companyInfo.booking)
+      }
+  },
+  mounted() {
+    this.handleCompanyInfo();
+    setTimeout(() => {
+      this.$refs.page_content.classList.add("anim_page_content")
+    }, 2000)
+  }
 }
 </script>
 
 <style>
-.container {
+/* .container {
   margin: 0 auto;
   min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
   text-align: center;
+} */
+
+.page_content {
+  margin-top: 100vh;
+  max-width: 1440px;
 }
 
 .title {
@@ -65,7 +84,69 @@ export default {
   padding-bottom: 15px;
 }
 
+@font-face {
+    font-family: Avenir;
+    src: url("~/assets/fonts/Avenir.ttf") format("truetype");
+}
+@font-face {
+    font-family: GenWanMin;
+    src: url("~/assets/fonts/GenWanMin-R.ttf") format("truetype");
+}
+@font-face {
+    font-family: MontereyMediumFLF;
+    src: url("~/assets/fonts/MontereyMediumFLF.ttf") format("truetype");
+}
+
 .links {
   padding-top: 15px;
+
+}
+.anim_page_content {
+  animation: 1s anim-content linear;
+  transition: top 1s;
+  margin-top: 0px;
+}
+@keyframes anim-content {
+  0% {
+    margin-top: 100vh;
+  }
+  100% {
+    margin-top: 0px;
+  }
+}
+
+@media (max-width: 1264px) {
+  .page_content {
+      max-width: 1024px;
+  }
+}
+
+
+@media (max-width: 960px) {
+  .page_content {
+      max-width: 900px;
+  }
+}
+
+
+@media screen and (max-width: 600px) {
+  #page {
+    width: 100%;
+  }
+  .page_content {
+    width: 100%;
+  }
+
+  .anim_page_content {
+    margin-top: 60px;
+  }
+  @keyframes anim-content {
+    0% {
+      margin-top: 100vh;
+    }
+    100% {
+      margin-top: 60px;
+    }
+  }
 }
 </style>
